@@ -1,0 +1,49 @@
+name: Setup and Deploy Vite Project
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install npm
+        run: sudo apt-get install -y npm
+
+      - name: Create Vite project
+        run: |
+          npm create vite@latest my-vite-app -- --template react-ts
+          cd my-vite-app
+          npm install
+
+      - name: Build Vite project
+        run: |
+          cd my-vite-app
+          npm run build
+
+      - name: Push built files
+        run: |
+          cd my-vite-app
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git init
+          git add -A
+          git commit -m "Initial Vite project setup"
+          git push -f origin main
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: my-vite-app/dist
