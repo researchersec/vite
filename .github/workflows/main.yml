@@ -3,7 +3,7 @@ name: Setup and Deploy Vite Project
 on:
   push:
     branches:
-      - main
+      - master  # Change this to match your default branch
 
 jobs:
   setup-and-deploy:
@@ -40,7 +40,10 @@ jobs:
           git init
           git add -A
           git commit -m "Initial Vite project setup"
-          git push -f origin main
+          git branch -M master  # Ensure the branch is named master
+          git push -f origin master  # Push to master branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
