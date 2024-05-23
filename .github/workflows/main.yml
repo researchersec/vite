@@ -38,6 +38,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git init
+          git remote add origin https://github.com/${{ github.repository }}.git  # Add this line
           git add -A
           git commit -m "Initial Vite project setup"
           git branch -M master  # Ensure the branch is named master
